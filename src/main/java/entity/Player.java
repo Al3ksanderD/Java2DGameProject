@@ -14,17 +14,25 @@ public class Player extends Entity {
 
     public final int screenX;
     public final int screenY;
+    int hasKey = 0;
+
+    public int getHasKey() {
+        return hasKey;
+    }
 
     public Player(GamePanel gp, KeyHandler keyH) {
         this.gp = gp;
         this.keyHandler = keyH;
-        setDefaultValues();
-        getPlayerImage();
 
         screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
         screenY = gp.screenHeight / 2 - (gp.tileSize / 2);
 
         solidArea = new Rectangle(8, 16, 32, 32);
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
+        setDefaultValues();
+        getPlayerImage();
+
     }
 
     public void setDefaultValues() {
@@ -67,6 +75,10 @@ public class Player extends Entity {
             collisionOn = false;
             gp.collisionChecker.checkTile(this);
 
+            // Check object collision
+            int objIndex = gp.collisionChecker.checkObject(this,true);
+            pickUpObject(objIndex);
+
             if (collisionOn == false) {
                 switch (direction) {
                     case "up":
@@ -99,6 +111,47 @@ public class Player extends Entity {
         }
 
 
+    }
+    public void pickUpObject(int i){
+        if(i != 999){
+            String objectName = gp.obj[i].name;
+
+            switch(objectName) {
+                case "Key":
+                    hasKey++;
+                    gp.playSE(1);
+                    gp.obj[i] = null;
+                    gp.userI.showMessage("Key picked up!");
+                    System.out.println("Key: "+hasKey);
+                    break;
+                case "Door":
+                    if(hasKey > 0){
+                        gp.playSE(3);
+                        gp.obj[i] = null;
+                        gp.userI.showMessage("Door opened!");
+                        hasKey--;
+                    }
+                    else{
+                        gp.userI.showMessage("You need a key to do that!");
+                    }
+                    System.out.println("Key: "+hasKey);
+                    break;
+                case "Boots":
+                    speed += 2;
+                    gp.playSE(2);
+                    gp.obj[i] = null;
+                    gp.userI.showMessage("Boots picked up, your faster now!");
+                    break;
+
+                case "Chest":
+                    gp.userI.setGameFinished(true);
+                    gp.stopMusic();
+                    gp.playSE(4);
+                    break;
+
+            }
+
+        }
     }
 
     public void draw(Graphics2D graphics2D) {
