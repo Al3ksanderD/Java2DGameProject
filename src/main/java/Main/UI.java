@@ -4,6 +4,7 @@ import object.OBJ_Key;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.text.DecimalFormat;
 
 public class UI {
     GamePanel gp;
@@ -14,6 +15,9 @@ public class UI {
     public String message = " ";
     int messageCounter = 0;
     boolean gameFinished = false;
+    double playTime;
+    DecimalFormat dFormat = new DecimalFormat("#0.00");
+
 
     public void setGameFinished(boolean gameFinished) {
         this.gameFinished = gameFinished;
@@ -40,9 +44,14 @@ public class UI {
 
             String text = "You found the treasure!";
             int textLength = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
-
             int x = gp.screenWidth/2 - textLength/2;
             int y = gp.screenHeight/2 - (gp.tileSize*3);
+            g2.drawString(text,x,y);
+
+            text = "You time is: " + dFormat.format(playTime) + "!";
+            textLength = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
+            x = gp.screenWidth/2 - textLength/2;
+            y = gp.screenHeight/2 + (gp.tileSize*4);
             g2.drawString(text,x,y);
 
             g2.setFont(arial_80B);
@@ -61,6 +70,12 @@ public class UI {
             g2.setColor(Color.white);
             g2.drawImage(keyImage,gp.tileSize/2, gp.tileSize/2, gp.tileSize,gp.tileSize, null);
             g2.drawString("x = "+ gp.player.getHasKey(), 74, 65);
+
+            //Time
+            playTime +=(double)1/60;
+
+            g2.drawString("Time: "+dFormat.format(playTime),gp.tileSize*11,65);
+
 
             // Message
             if(messageOn){
