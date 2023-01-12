@@ -101,6 +101,12 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(graphics);
 
         Graphics2D graphics2D = (Graphics2D) graphics;
+        // Debug
+        long drawStart = 0;
+        if(keyHandler.checkDrawTime == true){
+            drawStart = System.nanoTime();
+        }
+
         // Tile
         tileManager.draw(graphics2D);
 
@@ -114,6 +120,16 @@ public class GamePanel extends JPanel implements Runnable {
         player.draw(graphics2D);
         //UI
         userI.draw(graphics2D);
+
+        if(keyHandler.checkDrawTime == true){
+            long drawEnd = System.nanoTime();
+            long passed = drawEnd - drawStart;
+            graphics2D.setColor(Color.white);
+            graphics2D.drawString("Draw time:" + passed, 10, 400);
+            System.out.println("Draw Time: " + passed);
+        }
+
+
         // release system resources using it
         graphics2D.dispose();
     }
