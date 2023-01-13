@@ -10,19 +10,13 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class Player extends Entity {
-    GamePanel gp;
     KeyHandler keyHandler;
 
     public final int screenX;
     public final int screenY;
-    int hasKey = 0;
-
-    public int getHasKey() {
-        return hasKey;
-    }
 
     public Player(GamePanel gp, KeyHandler keyH) {
-        this.gp = gp;
+        super(gp);
         this.keyHandler = keyH;
 
         screenX = gp.screenWidth / 2 - (gp.tileSize / 2);
@@ -44,31 +38,16 @@ public class Player extends Entity {
     }
 
     public void getPlayerImage() {
-        up1 = setup("boy_up_1");
-        up2 = setup("boy_up_2");
-        down1 = setup("boy_down_1");
-        down2 = setup("boy_down_2");
-        left1 = setup("boy_left_1");
-        left2 = setup("boy_left_2");
-        right1 = setup("boy_right_1");
-        right2 = setup("boy_right_2");
+        up1 = setup("/player/boy_up_1");
+        up2 = setup("/player/boy_up_2");
+        down1 = setup("/player/boy_down_1");
+        down2 = setup("/player/boy_down_2");
+        left1 = setup("/player/boy_left_1");
+        left2 = setup("/player/boy_left_2");
+        right1 = setup("/player/boy_right_1");
+        right2 = setup("/player/boy_right_2");
 
     }
-
-
-    public BufferedImage setup(String imageName){
-        UtilityTool uTool = new UtilityTool();
-        BufferedImage image = null;
-        try{
-            image = ImageIO.read(getClass().getResourceAsStream("/player/" + imageName + ".png"));
-            image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
-
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-        return image;
-    }
-
     public void update() {
         if (keyHandler.upPressed || keyHandler.downPressed || keyHandler.leftPressed || keyHandler.rightPressed) {
             if (keyHandler.upPressed) {
@@ -125,42 +104,6 @@ public class Player extends Entity {
     }
     public void pickUpObject(int i){
         if(i != 999){
-            String objectName = gp.obj[i].name;
-
-            switch(objectName) {
-                case "Key":
-                    hasKey++;
-                    gp.playSE(1);
-                    gp.obj[i] = null;
-                    gp.userI.showMessage("Key picked up!");
-                    System.out.println("Key: "+hasKey);
-                    break;
-                case "Door":
-                    if(hasKey > 0){
-                        gp.playSE(3);
-                        gp.obj[i] = null;
-                        gp.userI.showMessage("Door opened!");
-                        hasKey--;
-                    }
-                    else{
-                        gp.userI.showMessage("You need a key to do that!");
-                    }
-                    System.out.println("Key: "+hasKey);
-                    break;
-                case "Boots":
-                    speed += 2;
-                    gp.playSE(2);
-                    gp.obj[i] = null;
-                    gp.userI.showMessage("Boots picked up, your faster now!");
-                    break;
-
-                case "Chest":
-                    gp.userI.setGameFinished(true);
-                    gp.stopMusic();
-                    gp.playSE(4);
-                    break;
-
-            }
 
         }
     }
