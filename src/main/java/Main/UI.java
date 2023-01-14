@@ -40,7 +40,7 @@ public class UI {
     public void draw (Graphics2D g2){
         if(gameFinished){
             g2.setFont(arial_40);
-            g2.setColor(Color.white);
+            g2.setColor(Color.black);
 
             String text = "You found the treasure!";
             int textLength = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
@@ -67,7 +67,7 @@ public class UI {
 
         } else{
             g2.setFont(arial_40);
-            g2.setColor(Color.white);
+            g2.setColor(Color.black);
             g2.drawImage(keyImage,gp.tileSize/2, gp.tileSize/2, gp.tileSize,gp.tileSize, null);
             g2.drawString("x = "+ gp.player.getHasKey(), 74, 65);
 
