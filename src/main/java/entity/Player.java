@@ -68,7 +68,9 @@ public class Player extends Entity {
             // Check object collision
             int objIndex = gp.collisionChecker.checkObject(this,true);
             pickUpObject(objIndex);
-
+            // Check NPC Collision
+            int npcIndex = gp.collisionChecker.checkEntity(this, gp.npc);
+            interactNPC(npcIndex);
             if (collisionOn == false) {
                 switch (direction) {
                     case "up":
@@ -84,10 +86,7 @@ public class Player extends Entity {
                         worldX += speed;
                         break;
                 }
-
             }
-
-
             spriteCounter++;
             if (spriteCounter > 15) {
                 if (spriteNum == 1) {
@@ -105,6 +104,11 @@ public class Player extends Entity {
     public void pickUpObject(int i){
         if(i != 999){
 
+        }
+    }
+    public void interactNPC(int i){
+        if(i != 999){
+            System.out.println("You are hitting an npc");
         }
     }
 
