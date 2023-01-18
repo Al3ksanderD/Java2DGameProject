@@ -51,6 +51,10 @@ public class GamePanel extends JPanel implements Runnable {
 
 
 
+    final int dialogueState = 3;
+
+
+
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.black);
@@ -58,7 +62,9 @@ public class GamePanel extends JPanel implements Runnable {
         this.addKeyListener(keyHandler);
         this.setFocusable(true);
     }
-
+    public int getDialogueState() {
+        return dialogueState;
+    }
     public void setupGame() {
         aSetter.setObject();
         aSetter.setNPC();

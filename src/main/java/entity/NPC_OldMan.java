@@ -11,6 +11,7 @@ public class NPC_OldMan extends Entity {
         direction = "down";
         speed = 1;
         getImage();
+        setDialogue();
     }
 
     public void getImage() {
@@ -23,6 +24,12 @@ public class NPC_OldMan extends Entity {
         right1 = setup("/npc/oldman_right_1");
         right2 = setup("/npc/oldman_right_2");
 
+    }
+    public void setDialogue(){
+        dialogues[0] = "Welcome Traveler";
+        dialogues[1] = "Once i was a traveler like you, \n but then i got a arrow to me knee";
+        dialogues[2] = "How are you?";
+        dialogues[3] = "Greetings friend";
     }
     @Override
     public void setAction(){
@@ -45,10 +52,10 @@ public class NPC_OldMan extends Entity {
                 direction = "right";
             }
             actionLockCounter = 0;
-
         }
-
-
+    }
+    public void speak(){
+        super.speak();
     }
 
 
