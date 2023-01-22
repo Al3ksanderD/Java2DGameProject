@@ -7,6 +7,9 @@ import tile.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -37,22 +40,26 @@ public class GamePanel extends JPanel implements Runnable {
     public CollisionChecker collisionChecker = new CollisionChecker(this);
     public AssetSetter aSetter = new AssetSetter(this);
     public UI userI= new UI(this);
+    public EventHandler eHandler = new EventHandler(this);
     Thread gameThread;
 
     // Entity and Object
     public Player player = new Player(this, keyHandler);
-    public SuperObject obj[] = new SuperObject[10];
+    public Entity obj[] = new Entity[10];
     public Entity npc[] = new Entity[10];
+    ArrayList<Entity> entityList = new ArrayList<>();
 
     // Game State
     public int gameState;
+    final int titleState = 0;
     public final int playState = 1;
     public final int pauseState = 2;
-
-
-
     final int dialogueState = 3;
 
+
+    public int getTitleState() {
+        return titleState;
+    }
 
 
     public GamePanel() {
@@ -68,8 +75,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void setupGame() {
         aSetter.setObject();
         aSetter.setNPC();
-        playMusic(0);
-        gameState = playState;
+        gameState = titleState;
     }
 
     public void startGameThread() {
@@ -128,43 +134,49 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
-
         Graphics2D graphics2D = (Graphics2D) graphics;
-        // Debug
-        long drawStart = 0;
-        if(keyHandler.checkDrawTime == true){
-            drawStart = System.nanoTime();
+        // Main menu
+        if(gameState == titleState){
+            userI.draw(graphics2D);
         }
+        else {
+            // Tile
+            tileManager.draw(graphics2D);
 
-        // Tile
-        tileManager.draw(graphics2D);
+            // Add entities to the list
+            entityList.add(player);
 
-        // Objects
-        for (int i = 0; i < obj.length; i++) {
-            if (obj[i] != null) {
-                obj[i].draw(graphics2D, this);
+            for(int i=0; i< npc.length; i++){
+                if(npc[i] != null){
+                    entityList.add(npc[i]);
+                }
             }
-        }
-        // Npc
-        for(int i = 0; i < npc.length; i++) {
-            if(npc[i] != null) {
-                npc[i].draw(graphics2D);
+            for(int i=0; i< obj.length; i++){
+                if(obj[i] != null){
+                    entityList.add(obj[i]);
+                }
             }
+            // Sort
+            Collections.sort(entityList, new Comparator<Entity>() {
+                @Override
+                public int compare(Entity e1, Entity e2) {
+                    int result = Integer.compare(e1.worldY, e2.worldX);
+                    return result;
+                }
+            });
+            // Draw Entities
+            for(int i = 0; i < entityList.size(); i++){
+                entityList.get(i).draw(graphics2D);
+            }
+            // Empty Entity List
+            for(int i = 0; i < entityList.size(); i++){
+                entityList.remove(i);
+            }
+
+            //UI
+            userI.draw(graphics2D);
+
         }
-        // Player
-        player.draw(graphics2D);
-        //UI
-        userI.draw(graphics2D);
-
-        if(keyHandler.checkDrawTime == true){
-            long drawEnd = System.nanoTime();
-            long passed = drawEnd - drawStart;
-            graphics2D.setColor(Color.white);
-            graphics2D.drawString("Draw time:" + passed, 10, 400);
-            System.out.println("Draw Time: " + passed);
-        }
-
-
         // release system resources using it
         graphics2D.dispose();
     }

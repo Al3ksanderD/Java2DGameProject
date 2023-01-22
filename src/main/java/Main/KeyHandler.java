@@ -1,5 +1,6 @@
 package Main;
 
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -19,6 +20,27 @@ public class KeyHandler implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
+        if(gp.gameState == gp.titleState) {
+            if(code == KeyEvent.VK_W){
+                 gp.userI.commandNum--;
+            }
+            if(code == KeyEvent.VK_S){
+                gp.userI.commandNum++;
+            }
+            if(code == KeyEvent.VK_ENTER){
+                if(gp.userI.commandNum == 0){
+                    gp.gameState = gp.playState;
+                    gp.playMusic(0);
+
+                }
+                else if(gp.userI.commandNum == 1){
+                    // work in progress
+                }
+                else if(gp.userI.commandNum == 2){
+                    System.exit(0);
+                }
+            }
+        }
         // Play State
         if(gp.gameState == gp.playState){
             if(code == KeyEvent.VK_W){

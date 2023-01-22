@@ -35,6 +35,9 @@ public class Player extends Entity {
         worldY = gp.tileSize * 21;
         speed = 4;
         direction = "down";
+        // Player Status
+        maxLife = 6;
+        life = maxLife;
     }
 
     public void getPlayerImage() {
@@ -71,6 +74,8 @@ public class Player extends Entity {
             // Check NPC Collision
             int npcIndex = gp.collisionChecker.checkEntity(this, gp.npc);
             interactNPC(npcIndex);
+            // check event
+            gp.eHandler.checkEvent();
             if (collisionOn == false) {
                 switch (direction) {
                     case "up":

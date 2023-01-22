@@ -11,11 +11,14 @@ import java.io.IOException;
 public class Entity {
 
     GamePanel gp;
+    public BufferedImage image, image2,image3;
+    public String name;
+    public boolean collision = false;
     public int worldX, worldY;
     public int speed;
 
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
-    public String direction;
+    public String direction = "down";
 
     public int spriteCounter = 0;
     public int spriteNum = 1;
@@ -25,6 +28,23 @@ public class Entity {
     public int actionLockCounter = 0;
     String dialogues[] = new String[20];
     int dialogueIndex = 0;
+    // Character Status
+    int maxLife;
+    int life;
+    public int getLife() {
+        return life;
+    }
+    public void setLife(int life) {
+        this.life = life;
+    }
+
+    public void setMaxLife(int maxLife) {
+        this.maxLife = maxLife;
+    }
+    public int getMaxLife() {
+        return maxLife;
+    }
+
 
     public Entity(GamePanel gp){
         this.gp = gp;
